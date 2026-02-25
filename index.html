@@ -2,93 +2,278 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>YAMUKA</title>
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GlobalEdu - Dünya Markası Platformu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root { --p: #ff4500; --bg: #050505; --card: #121212; }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        
-        body { 
-            margin: 0; background: var(--bg); color: white; 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica; 
-            overflow-x: hidden;
+        :root {
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --primary: #4f46e5;
+            --secondary: #6366f1;
+            --text: #1e293b;
+            --success: #22c55e;
+            --danger: #ef4444;
         }
 
-        /* Üst Bar */
-        header {
-            height: 70px; padding: 25px 20px 10px;
-            display: flex; align-items: center; justify-content: space-between;
-            position: sticky; top: 0; background: rgba(5,5,5,0.9);
-            backdrop-filter: blur(10px); z-index: 1000;
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
         }
-        .logo { font-size: 1.8rem; font-weight: 900; color: var(--p); letter-spacing: -1.5px; }
 
-        /* Video Akışı */
-        .feed { padding: 10px; padding-bottom: 90px; }
-        .v-card { 
-            background: var(--card); border-radius: 20px; 
-            margin-bottom: 20px; overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            border: 1px solid #1f1f1f;
-        }
-        .v-iframe { width: 100%; aspect-ratio: 16/9; border: none; display: block; }
-        .v-content { padding: 15px; }
-        .v-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 5px; color: #efefef; }
-        .v-meta { font-size: 0.8rem; color: #888; display: flex; gap: 10px; }
-
-        /* Alt Navigasyon */
+        /* Navigasyon Barı */
         nav {
-            position: fixed; bottom: 0; width: 100%; height: 80px;
-            background: rgba(10,10,10,0.95); backdrop-filter: blur(15px);
-            display: flex; justify-content: space-around; align-items: center;
-            border-top: 1px solid #222; padding-bottom: env(safe-area-inset-bottom);
+            width: 100%;
+            background: var(--primary);
+            padding: 1rem 2rem;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
         }
-        .n-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: #666; font-size: 0.7rem; }
-        .n-item.active { color: var(--p); }
-        .n-icon { font-size: 1.5rem; }
 
-        /* Animasyon */
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .v-card { animation: fadeIn 0.5s ease forwards; }
+        .logo { font-weight: 700; font-size: 1.5rem; letter-spacing: -1px; }
+
+        /* Ana Konteyner */
+        .app-container {
+            max-width: 900px;
+            width: 95%;
+            margin: 2rem auto;
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+        }
+
+        /* Soru Alanı */
+        .quiz-card {
+            background: var(--card);
+            border-radius: 1.5rem;
+            padding: 2.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .subject-badge {
+            background: #e0e7ff;
+            color: var(--primary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        #question-text {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 1.5rem 0;
+            line-height: 1.4;
+        }
+
+        .options-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .option-btn {
+            background: var(--card);
+            border: 2px solid #e2e8f0;
+            padding: 1rem;
+            border-radius: 1rem;
+            text-align: left;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+        }
+
+        .option-btn:hover {
+            border-color: var(--primary);
+            background: #f5f3ff;
+            transform: translateX(5px);
+        }
+
+        /* Sidebar / İstatistikler */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .stat-card {
+            background: var(--card);
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+
+        .ai-assistant {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            position: relative;
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+
+        #progress-fill {
+            height: 100%;
+            background: var(--success);
+            width: 0%;
+            border-radius: 4px;
+            transition: width 0.4s ease;
+        }
+
+        /* Aksiyon Butonları */
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .exit-btn {
+            background: #fee2e2;
+            color: var(--danger);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* Mobil Uyumluluk */
+        @media (max-width: 768px) {
+            .app-container { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo">YAMUKA</div>
-        <div style="font-size: 1.2rem;">🔍</div>
-    </header>
+<nav>
+    <div class="logo">GLOBALEDU</div>
+    <button class="exit-btn" onclick="terminate()">Çıkış Yap</button>
+</nav>
 
-    <div class="feed">
-        <div class="v-card">
-            <iframe class="v-iframe" src="https://www.youtube.com/embed/S9uTscDZupg" allowfullscreen></iframe>
-            <div class="v-content">
-                <div class="v-title">Yamuka Özel: 2026 Teknoloji Devrimi</div>
-                <div class="v-meta"><span>Yamuka HQ</span> • <span>1.2 Mn İzlenme</span></div>
+<div class="app-container">
+    <main>
+        <div class="quiz-card">
+            <span id="subject-label" class="subject-badge">MODÜL: YÜKLENİYOR</span>
+            <div id="question-text">Soru veritabanı analiz ediliyor...</div>
+            
+            <div class="options-grid" id="options">
+                </div>
+
+            <div id="feedback" style="margin-top: 20px; font-weight: 600;"></div>
+        </div>
+    </main>
+
+    <aside class="sidebar">
+        <div class="stat-card">
+            <div style="font-size: 0.8rem; color: #64748b;">BAŞARI SKORU</div>
+            <div id="score-display" style="font-size: 2rem; font-weight: 700;">0</div>
+            <div class="progress-container">
+                <div id="progress-fill"></div>
             </div>
         </div>
 
-        <div class="v-card">
-            <iframe class="v-iframe" src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
-            <div class="v-content">
-                <div class="v-title">Geleceğin Platformuna Hoş Geldiniz</div>
-                <div class="v-meta"><span>Utkan</span> • <span>850 B İzlenme</span></div>
-            </div>
+        <div class="ai-assistant">
+            <h3 style="margin-top: 0;">🤖 AI Asistan</h3>
+            <p id="ai-message" style="font-size: 0.9rem; line-height: 1.5;">Merhaba! Bugün seninle dünya markası olma yolunda ilerliyoruz. Hazır olduğunda bir soru seç!</p>
+            <button class="btn-primary" style="background: rgba(255,255,255,0.2);" onclick="askAi()">İpucu İstiyorum</button>
         </div>
-    </div>
+    </aside>
+</div>
 
-    <nav>
-        <div class="n-item active"><span class="n-icon">🏠</span>Ana Sayfa</div>
-        <div class="n-item"><span class="n-icon">⚡</span>Shorts</div>
-        <div class="n-item"><span class="n-icon" style="font-size: 2rem;">⊕</span></div>
-        <div class="n-item"><span class="n-icon">🔔</span>Bildirim</div>
-        <div class="n-item"><span class="n-icon">👤</span>Profil</div>
-    </nav>
+<script>
+    const questions = [
+        { s: "Bilişim", q: "Dünya çapında 'internet sitelerinin dili' olarak bilinen yapısal dil hangisidir?", o: ["Python", "C#", "HTML", "Swift"], c: 2 },
+        { s: "Matematik", q: "Bir üçgenin iç açılarının toplamı kaç derecedir?", o: ["90°", "180°", "270°", "360°"], c: 1 },
+        { s: "Fen Bilimleri", q: "Işık hızı saniyede yaklaşık kaç kilometredir?", o: ["150.000", "300.000", "500.000", "1.000.000"], c: 1 },
+        { s: "Bilişim", q: "Hangisi veritabanı yönetim sistemidir?", o: ["MySQL", "Photoshop", "Chrome", "Spotify"], c: 0 },
+        { s: "Genel Kültür", q: "Dünya'nın en yüksek dağı hangisidir?", o: ["K2", "Lhotse", "Everest", "Ağrı"], c: 2 }
+    ];
+
+    let currentIdx = 0;
+    let score = 0;
+
+    function initQuiz() {
+        const q = questions[Math.floor(Math.random() * questions.length)];
+        currentIdx = questions.indexOf(q);
+        
+        document.getElementById('subject-label').innerText = "DERS: " + q.s.toUpperCase();
+        document.getElementById('question-text').innerText = q.q;
+        
+        const optDiv = document.getElementById('options');
+        optDiv.innerHTML = "";
+        
+        q.o.forEach((opt, i) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerHTML = `<b style="margin-right:15px">${String.fromCharCode(65+i)}</b> ${opt}`;
+            btn.onclick = () => check(i);
+            optDiv.appendChild(btn);
+        });
+        document.getElementById('feedback').innerText = "";
+    }
+
+    function check(idx) {
+        const correct = questions[currentIdx].c;
+        const feedback = document.getElementById('feedback');
+        
+        if(idx === correct) {
+            score += 20;
+            feedback.innerHTML = "✨ MUHTEŞEM! Doğru cevap.";
+            feedback.style.color = "var(--success)";
+            updateProgress();
+            setTimeout(initQuiz, 1500);
+        } else {
+            feedback.innerHTML = "⚠️ Hata: Bu seçenek doğru değil kanka.";
+            feedback.style.color = "var(--danger)";
+        }
+    }
+
+    function updateProgress() {
+        document.getElementById('score-display').innerText = score;
+        const fill = document.getElementById('progress-fill');
+        let width = (score / 100) * 100;
+        fill.style.width = (width > 100 ? 100 : width) + "%";
+    }
+
+    function askAi() {
+        const q = questions[currentIdx];
+        document.getElementById('ai-message').innerText = "AI Düşünüyor... Analizime göre doğru cevap " + q.o[q.c] + " gibi görünüyor. Hadi yaparsın!";
+    }
+
+    function terminate() {
+        if(confirm("Marka yolculuğunu durdurmak istediğine emin misin?")) {
+            document.body.innerHTML = `<div style="text-align:center; margin-top:100px;"><h1>Final Skoru: ${score}</h1><p>Yarın daha iyi olmalısın!</p><button onclick="location.reload()">Yeniden Başla</button></div>`;
+        }
+    }
+
+    // Başlat
+    initQuiz();
+</script>
 
 </body>
 </html>
-
